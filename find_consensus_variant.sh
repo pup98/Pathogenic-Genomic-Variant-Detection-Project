@@ -117,7 +117,7 @@ echo "Finding valid Clinvar variant id's corresponding to the consensus"
 mkdir clinvarResults
 cd clinvarResults
 
-awk 'NR == FNR {a[$1 $2];next} (("chr")$1 $2 in a)' ../final_consensus_variants.vcf /home/NGS/tools/clinvar_20230520.vcf > validated_clinvar_variants.vcf
+awk 'NR == FNR {a[$1 $2 $5];next} (("chr")$1 $2 $5 in a)' ../final_consensus_variants.vcf /home/NGS/tools/clinvar_20230520.vcf > validated_clinvar_variants.vcf
 
 
 echo "Total number of validated Clinvar entries corresponding to your list of variants is:"
@@ -135,13 +135,17 @@ grep -w 'CLNSIG=Likely_pathogenic' clnid_available.vcf > likely_pathogenic_varia
 echo "Number of likely pathogenic variants"
 wc -l likely_pathogenic_variants.vcf
 
+grep -w 'CLNSIG=Pathogenic/Likely_pathogenic' clnid.vcf > pathogenic_and_likely_pathogenic.vcf
+echo "Number of pathogenic_likely_pathogenic variants"
+wc  -l pathogenic_and_likely_pathogenic.vcf
+
 grep -w 'CLNSIG=Uncertain_significance' clnid.vcf > uncertain_significance.vcf
 echo "Number of variants of uncertain significance"
 wc  -l uncertain_significance_variants.vcf
 
-grep -w 'CLNSIG=Pathogenic/Likely_pathogenic' clnid.vcf > pathogenic_likely_pathogenic.vcf
-echo "Number of pathogenic_likely_pathogenic variants"
-wc  -l pathogenic_likely_pathogenic.vcf
+grep -w 'CLNSIG=Conflicting_interpretations_of_pathogenicity' clnid.vcf > conflicting_variants.vcf
+echo "Number of variants of uncertain significance"
+wc  -l conflicting_variants.vcf
 
 
 echo 'Congratulations! Pipeline ran successfully ....'
